@@ -2,7 +2,7 @@
 {
     static string welcomeText = "Здравствуйте! Вас приветствует математическая программа";
     static string requestText = "Для выполнения расчет введите целое число \nДля завершения программы введите \"q\"";
-
+   
     static string warningText = "Это не целое число, пожалуйста повторите ввод: ";
 
     static string resultText1 = "Факториал равен: ";
