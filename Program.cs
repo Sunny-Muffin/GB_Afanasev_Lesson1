@@ -1,20 +1,24 @@
-﻿class Program
+﻿using System;
+using System.Numerics;
+
+class Program
 {
     static string welcomeText = "Здравствуйте! Вас приветствует математическая программа";
-    static string requestText = "Для выполнения расчет введите целое число \nДля завершения программы введите \"q\"";
+    static string requestText = "Для выполнения расчет введите целое положительное число \nДля завершения программы введите \"q\"";
    
-    static string warningText = "Это не целое число, пожалуйста повторите ввод: ";
+    static string warningText = "Это не целое положительное число, пожалуйста повторите ввод: ";
 
     static string resultText1 = "Факториал равен: ";
     static string resultText2 = "Сумма от 1 до N равна: ";
     static string resultText3 = "Mаксимальное четное число меньше N равно: ";
 
+    static string quitSymbol = "q";
 
     static void Main(string[] args)
     {
         Welcome();
         int userNumber = AskForNumber();
-        (int fact, int sum, int max) = MakeCalculations(userNumber);
+        (BigInteger fact, int sum, int max) = MakeCalculations(userNumber);
         PrintResults(fact, sum, max);
         Console.ReadLine();
     }
@@ -25,14 +29,16 @@
         Console.WriteLine(requestText);
     }
 
-    public static int AskForNumber()
+    static int AskForNumber()
     {
         string userInput;
-        int userNum;
+        int userNum = 0;
 
-        while (!Int32.TryParse(userInput = Console.ReadLine(), out userNum))
+        while (!Int32.TryParse(userInput = Console.ReadLine(), out userNum) || userNum <= 0)
         {
-            if (userInput == "q")
+            Console.WriteLine(userNum);
+
+            if (userInput == quitSymbol)
             {
                 Environment.Exit(0);
             }
@@ -41,28 +47,56 @@
                 Console.WriteLine(warningText);
             }
         }
-
+        Console.WriteLine(userNum);
         return userNum;
     }
 
-    public static (int, int, int) MakeCalculations(int num)
+    static (BigInteger, int, int) MakeCalculations(int num)
     {
-        int factorial = 1; // хранит факториал числа введенного пользователем
-        int sum = 0; // хранит сумму всех чисел до введенного пользователем
-        int maxEven = 0; // хранит наибольшее четное число до введенного пользователем
-        for (int i = 1; i <= num; ++i)
-        {
-            factorial *= i;
-            sum += i;
-            if (i % 2 == 0)
-            {
-                maxEven = i;
-            }
-        }
-        return (factorial, sum, maxEven);
+        return (CalculateFactorial(num), CalculateSum(num), CalculateMaxEven(num));
     }
 
-    public static void PrintResults(int f, int s, int m)
+    static BigInteger CalculateFactorial(int n)
+    {
+        BigInteger factorial = 1;
+
+        for (int i = 1; i <= n; ++i)
+        {
+            factorial *= i;
+        }
+
+        return factorial;
+    }
+
+    static int CalculateSum(int n)
+    {
+        int sum = 0;
+
+        for (int i = 1; i <= n; ++i)
+        {
+            sum += i;
+        }
+
+        return sum;
+    }
+
+    static int CalculateMaxEven(int n)
+    {
+        int maxEven;
+
+        if (n % 2 == 0)
+        {
+            maxEven = n;
+        }
+        else
+        {
+            maxEven = n - 1;
+        }
+
+        return maxEven;
+    }
+
+    static void PrintResults(BigInteger f, int s, int m)
     {
         Console.WriteLine(resultText1 + f);
         Console.WriteLine(resultText2 + s);
